@@ -1,0 +1,3 @@
+name: Chessed
+version: $version
+main: com.jakubmeysner.chessed.Chessed
