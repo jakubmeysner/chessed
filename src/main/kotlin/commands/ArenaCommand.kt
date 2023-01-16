@@ -9,7 +9,8 @@ import org.bukkit.command.TabExecutor
 
 class ArenaCommand(private val plugin: Chessed) : TabExecutor {
     private val subcommands = mapOf(
-        "add" to ArenaAddCommand(plugin)
+        "add" to ArenaAddCommand(plugin),
+        "remove" to ArenaRemoveCommand(plugin)
     )
 
     override fun onTabComplete(
@@ -28,14 +29,14 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        return subcommands[args[0]]
-            ?.onCommand(sender, command, label, args.copyOfRange(1, args.size))
-            ?: let {
-                sender.spigot().sendMessage(
-                    *ComponentBuilder("Usage: /arena (add) ...").color(ChatColor.RED).create()
-                )
+        if (args.isNotEmpty() && args[0] in subcommands.keys) {
+            return subcommands.getValue(args[0]).onCommand(sender, command, label, args.copyOfRange(1, args.size))
+        }
 
-                return true
-            }
+        sender.spigot().sendMessage(
+            *ComponentBuilder("Usage: /arena (${subcommands.keys.joinToString("|")}) ...").color(ChatColor.RED).create()
+        )
+
+        return true
     }
 }
