@@ -1,3 +1,18 @@
 name: Chessed
 version: $version
 main: com.jakubmeysner.chessed.Chessed
+api-version: 1.19
+
+commands:
+  arena:
+    description: Controls arenas.
+    permission: chessed.arena
+    usage: "/arena (add) ..."
+
+permissions:
+  chessed.*:
+    default: op
+    children:
+      chessed.arena: true
+  chessed.arena:
+    default: op
