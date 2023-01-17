@@ -41,7 +41,12 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
         }.filter { it.startsWith(args.last()) }
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+    override fun onCommand(
+        sender: CommandSender,
+        command: Command,
+        label: String,
+        args: Array<out String>
+    ): Boolean {
         if (sender is Entity && args.size !in 1..6) {
             sender.spigot().sendMessage(
                 *ComponentBuilder("Usage: /arena add <arena> [<worldName>] [<x>] [<y>] [<z>] [<yaw>]")
@@ -72,7 +77,9 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
                 *ComponentBuilder("Argument <z> must be an integer!")
                     .color(ChatColor.RED).create()
             )
-        } else if (args.size >= 6 && args[5] !in listOf("0", "90", "180", "270")) {
+        } else if (
+            args.size >= 6 && args[5] !in listOf("0", "90", "180", "270")
+        ) {
             sender.spigot().sendMessage(
                 *ComponentBuilder("Argument <yaw> must be 0, 90, 180 or 270!")
                     .color(ChatColor.RED).create()
@@ -90,13 +97,29 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
         } else {
             val name = args[0]
 
-            val world = args.getOrNull(1)?.let { Bukkit.getWorld(it) } ?: (sender as Entity).location.world
-            val x = args.getOrNull(2)?.toInt() ?: (sender as Entity).location.blockX
-            val y = args.getOrNull(3)?.toInt() ?: (sender as Entity).location.blockY
-            val z = args.getOrNull(4)?.toInt() ?: (sender as Entity).location.blockZ
-            val yaw = args.getOrNull(5)?.toInt() ?: ((sender as Entity).location.yaw.toInt() / 90 * 90)
+            val world = args.getOrNull(1)?.let { Bukkit.getWorld(it) }
+                ?: (sender as Entity).location.world
 
-            val location = Location(world, x.toDouble(), y.toDouble(), z.toDouble(), yaw.toFloat(), 0F)
+            val x = args.getOrNull(2)?.toInt()
+                ?: (sender as Entity).location.blockX
+
+            val y = args.getOrNull(3)?.toInt()
+                ?: (sender as Entity).location.blockY
+
+            val z = args.getOrNull(4)?.toInt()
+                ?: (sender as Entity).location.blockZ
+
+            val yaw = args.getOrNull(5)?.toInt()
+                ?: ((sender as Entity).location.yaw.toInt() / 90 * 90)
+
+            val location = Location(
+                world,
+                x.toDouble(),
+                y.toDouble(),
+                z.toDouble(),
+                yaw.toFloat(),
+                0F
+            )
 
             val arena = Arena(name, location)
             plugin.arenas[arena.name] = arena

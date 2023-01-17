@@ -9,6 +9,7 @@ class Chessed : JavaPlugin() {
     val arenas = mutableMapOf<String, Arena>()
 
     override fun onEnable() {
-        getCommand("arena")?.setExecutor(ArenaCommand(this)) ?: throw Error("Command not registered")
+        getCommand("arena")?.setExecutor(ArenaCommand(this))
+            ?: throw Error("Command not registered")
     }
 }

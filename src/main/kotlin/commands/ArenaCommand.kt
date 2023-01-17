@@ -24,17 +24,33 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
         }
 
         return subcommands[args[0]]
-            ?.onTabComplete(sender, command, label, args.copyOfRange(1, args.size))
+            ?.onTabComplete(
+                sender,
+                command,
+                label,
+                args.copyOfRange(1, args.size)
+            )
             ?: listOf()
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+    override fun onCommand(
+        sender: CommandSender,
+        command: Command,
+        label: String,
+        args: Array<out String>
+    ): Boolean {
         if (args.isNotEmpty() && args[0] in subcommands.keys) {
-            return subcommands.getValue(args[0]).onCommand(sender, command, label, args.copyOfRange(1, args.size))
+            return subcommands.getValue(args[0]).onCommand(
+                sender,
+                command,
+                label,
+                args.copyOfRange(1, args.size)
+            )
         }
 
         sender.spigot().sendMessage(
-            *ComponentBuilder("Usage: /arena (${subcommands.keys.joinToString("|")}) ...").color(ChatColor.RED).create()
+            *ComponentBuilder("Usage: /arena (${subcommands.keys.joinToString("|")}) ...")
+                .color(ChatColor.RED).create()
         )
 
         return true

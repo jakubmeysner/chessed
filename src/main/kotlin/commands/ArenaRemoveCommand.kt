@@ -20,7 +20,12 @@ class ArenaRemoveCommand(private val plugin: Chessed) : TabExecutor {
         }.filter { it.startsWith(args.last()) }
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+    override fun onCommand(
+        sender: CommandSender,
+        command: Command,
+        label: String,
+        args: Array<out String>
+    ): Boolean {
         if (args.size != 1) {
             sender.spigot().sendMessage(
                 *ComponentBuilder("Usage: /arena remove <arena>")
