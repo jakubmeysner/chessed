@@ -7,7 +7,7 @@ commands:
   arena:
     description: Controls arenas.
     permission: chessed.arena
-    usage: "/arena (add) ..."
+    usage: "/arena (add|remove) ..."
 
 permissions:
   chessed.*:
