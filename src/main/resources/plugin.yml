@@ -8,8 +8,9 @@ commands:
     description: Controls arenas.
     permission: chessed.arena
     usage: |
-      /arena (add|remove) ...
+      /arena (add|build|remove) ...
       /arena add <arena> [<worldName>] [<x>] [<y>] [<z>] [<yaw>]
+      /arena build <arena>
       /arena remove <arena>
 
 permissions:

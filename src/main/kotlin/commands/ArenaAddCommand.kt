@@ -36,11 +36,12 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
                 }
             }
 
-            6 -> listOf("0", "90", "180", "270")
+            6 -> listOf("90", "0", "-90", "-180")
             else -> listOf()
         }.filter { it.startsWith(args.last()) }
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     override fun onCommand(
         sender: CommandSender,
         command: Command,
@@ -84,10 +85,10 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
                 }
             )
         } else if (
-            args.size >= 6 && args[5] !in listOf("0", "90", "180", "270")
+            args.size >= 6 && args[5] !in listOf("90", "0", "-90", "-180")
         ) {
             sender.spigot().sendMessage(
-                TextComponent("Argument <yaw> must be 0, 90, 180 or 270!").apply {
+                TextComponent("Argument <yaw> must be 90, 0, -90 or -180!").apply {
                     color = ChatColor.RED
                 }
             )
@@ -119,7 +120,12 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
                 args.getOrNull(4)?.toInt() ?: (sender as Entity).location.blockZ
 
             val yaw = args.getOrNull(5)?.toInt()
-                ?: ((sender as Entity).location.yaw.toInt() / 90 * 90)
+                ?: when ((sender as Entity).location.yaw) {
+                    in 45.0..<135.0 -> 90
+                    in -45.0..<45.0 -> 0
+                    in -135.0..<-45.0 -> -90
+                    else -> -180
+                }
 
             val location = Location(
                 world,

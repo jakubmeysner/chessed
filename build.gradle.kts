@@ -20,6 +20,13 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        languageVersion = "1.8"
+    }
+}
+
 tasks.processResources {
     expand("version" to version)
 }
@@ -35,8 +42,4 @@ tasks.shadowJar {
 
 tasks.test {
     useJUnitPlatform()
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
 }
