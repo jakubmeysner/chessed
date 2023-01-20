@@ -29,6 +29,7 @@ tasks.jar {
 }
 
 tasks.shadowJar {
+    archiveBaseName.set("Chessed")
     archiveClassifier.set("")
 }
 
