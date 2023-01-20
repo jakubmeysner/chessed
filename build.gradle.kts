@@ -24,6 +24,10 @@ tasks.processResources {
     expand("version" to version)
 }
 
+tasks.jar {
+    archiveBaseName.set("Chessed")
+}
+
 tasks.shadowJar {
     archiveClassifier.set("")
 }
