@@ -28,20 +28,22 @@ class ArenaRemoveCommand(private val plugin: Chessed) : TabExecutor {
     ): Boolean {
         if (args.size != 1) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Usage: /arena remove <arena>")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Usage: /arena remove <arena>").color(
+                    ChatColor.RED
+                ).create()
             )
         } else if (args[0] !in plugin.arenas.keys) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Argument <arena> must be an existing arena name!")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Argument <arena> must be an existing arena name!").color(
+                    ChatColor.RED
+                ).create()
             )
         } else {
             plugin.arenas.remove(args[0])
 
             sender.spigot().sendMessage(
-                *ComponentBuilder("Removed arena ${args[0]}.")
-                    .color(ChatColor.GREEN).create()
+                *ComponentBuilder("Removed arena ${args[0]}.").color(ChatColor.GREEN)
+                    .create()
             )
         }
 

@@ -49,50 +49,60 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
     ): Boolean {
         if (sender is Entity && args.size !in 1..6) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Usage: /arena add <arena> [<worldName>] [<x>] [<y>] [<z>] [<yaw>]")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Usage: /arena add <arena> [<worldName>] [<x>] [<y>] [<z>] [<yaw>]").color(
+                    ChatColor.RED
+                ).create()
             )
         } else if (sender !is Entity && args.size != 6) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Usage: /arena add <arena> <worldName> <x> <y> <z> <yaw>")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Usage: /arena add <arena> <worldName> <x> <y> <z> <yaw>").color(
+                    ChatColor.RED
+                ).create()
             )
         } else if (!args[0].matches(Regex("""^\w{3,16}$"""))) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Argument <arena> must contain 3-16 alphanumeric characters and underscores!")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Argument <arena> must contain 3-16 alphanumeric characters and underscores!").color(
+                    ChatColor.RED
+                ).create()
             )
         } else if (args.size >= 3 && args[2].toIntOrNull() == null) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Argument <x> must be an integer!")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Argument <x> must be an integer!").color(
+                    ChatColor.RED
+                ).create()
             )
         } else if (args.size >= 4 && args[3].toIntOrNull() == null) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Argument <y> must be an integer!")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Argument <y> must be an integer!").color(
+                    ChatColor.RED
+                ).create()
             )
         } else if (args.size >= 5 && args[4].toIntOrNull() == null) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Argument <z> must be an integer!")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Argument <z> must be an integer!").color(
+                    ChatColor.RED
+                ).create()
             )
-        } else if (
-            args.size >= 6 && args[5] !in listOf("0", "90", "180", "270")
+        } else if (args.size >= 6 && args[5] !in listOf(
+                "0", "90", "180", "270"
+            )
         ) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Argument <yaw> must be 0, 90, 180 or 270!")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Argument <yaw> must be 0, 90, 180 or 270!").color(
+                    ChatColor.RED
+                ).create()
             )
         } else if (args[0] in plugin.arenas.keys) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Argument <arena> must be a unique arena name!")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Argument <arena> must be a unique arena name!").color(
+                    ChatColor.RED
+                ).create()
             )
         } else if (args.size >= 2 && Bukkit.getWorld(args[1]) == null) {
             sender.spigot().sendMessage(
-                *ComponentBuilder("Argument <worldName> must be a world name!")
-                    .color(ChatColor.RED).create()
+                *ComponentBuilder("Argument <worldName> must be a world name!").color(
+                    ChatColor.RED
+                ).create()
             )
         } else {
             val name = args[0]
@@ -100,14 +110,14 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
             val world = args.getOrNull(1)?.let { Bukkit.getWorld(it) }
                 ?: (sender as Entity).location.world
 
-            val x = args.getOrNull(2)?.toInt()
-                ?: (sender as Entity).location.blockX
+            val x =
+                args.getOrNull(2)?.toInt() ?: (sender as Entity).location.blockX
 
-            val y = args.getOrNull(3)?.toInt()
-                ?: (sender as Entity).location.blockY
+            val y =
+                args.getOrNull(3)?.toInt() ?: (sender as Entity).location.blockY
 
-            val z = args.getOrNull(4)?.toInt()
-                ?: (sender as Entity).location.blockZ
+            val z =
+                args.getOrNull(4)?.toInt() ?: (sender as Entity).location.blockZ
 
             val yaw = args.getOrNull(5)?.toInt()
                 ?: ((sender as Entity).location.yaw.toInt() / 90 * 90)
@@ -125,8 +135,9 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
             plugin.arenas[arena.name] = arena
 
             sender.spigot().sendMessage(
-                *ComponentBuilder("Created new arena ${arena.name}.")
-                    .color(ChatColor.GREEN).create()
+                *ComponentBuilder("Created new arena ${arena.name}.").color(
+                    ChatColor.GREEN
+                ).create()
             )
         }
 

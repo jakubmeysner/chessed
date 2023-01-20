@@ -9,8 +9,7 @@ import org.bukkit.command.TabExecutor
 
 class ArenaCommand(private val plugin: Chessed) : TabExecutor {
     private val subcommands = mapOf(
-        "add" to ArenaAddCommand(plugin),
-        "remove" to ArenaRemoveCommand(plugin)
+        "add" to ArenaAddCommand(plugin), "remove" to ArenaRemoveCommand(plugin)
     )
 
     override fun onTabComplete(
@@ -23,14 +22,9 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
             return subcommands.keys.filter { it.startsWith(args.last()) }
         }
 
-        return subcommands[args[0]]
-            ?.onTabComplete(
-                sender,
-                command,
-                label,
-                args.copyOfRange(1, args.size)
-            )
-            ?: listOf()
+        return subcommands[args[0]]?.onTabComplete(
+            sender, command, label, args.copyOfRange(1, args.size)
+        ) ?: listOf()
     }
 
     override fun onCommand(
@@ -41,16 +35,14 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
     ): Boolean {
         if (args.isNotEmpty() && args[0] in subcommands.keys) {
             return subcommands.getValue(args[0]).onCommand(
-                sender,
-                command,
-                label,
-                args.copyOfRange(1, args.size)
+                sender, command, label, args.copyOfRange(1, args.size)
             )
         }
 
         sender.spigot().sendMessage(
-            *ComponentBuilder("Usage: /arena (${subcommands.keys.joinToString("|")}) ...")
-                .color(ChatColor.RED).create()
+            *ComponentBuilder("Usage: /arena (${subcommands.keys.joinToString("|")}) ...").color(
+                ChatColor.RED
+            ).create()
         )
 
         return true
