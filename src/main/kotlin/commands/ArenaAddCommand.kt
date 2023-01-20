@@ -135,7 +135,7 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
 
             sender.spigot().sendMessage(
                 TextComponent("Created new arena ${arena.name}.").apply {
-                    color = ChatColor.RED
+                    color = ChatColor.GREEN
                 }
             )
         }
