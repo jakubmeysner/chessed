@@ -6,7 +6,6 @@ import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
-import org.bukkit.entity.Entity
 
 class ArenaCommand(private val plugin: Chessed) : TabExecutor {
     private val subcommands = mapOf(
@@ -40,10 +39,6 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
             return subcommands.getValue(args[0]).onCommand(
                 sender, command, label, args.copyOfRange(1, args.size)
             )
-        }
-
-        if (sender is Entity) {
-            sender.sendMessage(sender.location.toString())
         }
 
         sender.spigot().sendMessage(
