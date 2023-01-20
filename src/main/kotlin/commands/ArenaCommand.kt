@@ -2,7 +2,7 @@ package com.jakubmeysner.chessed.commands
 
 import com.jakubmeysner.chessed.Chessed
 import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
@@ -40,9 +40,9 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
         }
 
         sender.spigot().sendMessage(
-            *ComponentBuilder("Usage: /arena (${subcommands.keys.joinToString("|")}) ...").color(
-                ChatColor.RED
-            ).create()
+            TextComponent("Usage: /arena (${subcommands.keys.joinToString("|")}) ...").apply {
+                color = ChatColor.RED
+            }
         )
 
         return true
