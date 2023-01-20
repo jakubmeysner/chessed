@@ -7,7 +7,6 @@ import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
-import kotlin.math.pow
 
 class ArenaBuildCommand(private val plugin: Chessed) : TabExecutor {
     override fun onTabComplete(
@@ -53,10 +52,8 @@ class ArenaBuildCommand(private val plugin: Chessed) : TabExecutor {
                     val block = arena.getBlock(x, y, -1)
 
                     block.type =
-                        if ((-1.0).pow(1.0 * ((x / 5) + (y / 5))) == 1.0)
-                            Material.BLACK_CONCRETE
-                        else
-                            Material.WHITE_CONCRETE
+                        if ((x / 5 + y / 5) % 2 == 0) Material.BLACK_CONCRETE
+                        else Material.WHITE_CONCRETE
                 }
             }
 
