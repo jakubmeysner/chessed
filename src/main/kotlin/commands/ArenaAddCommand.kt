@@ -18,25 +18,23 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
         label: String,
         args: Array<out String>
     ): List<String> {
-        return when (args.size) {
-            2 -> Bukkit.getWorlds().map { it.name }
+        return when (args.lastIndex) {
+            1 -> Bukkit.getWorlds().map { it.name }
 
-            in 2..5 -> {
-                if (sender is Entity) {
-                    return listOf(sender.location.let {
-                        when (args.size) {
-                            3 -> it.blockX
-                            4 -> it.blockY
-                            5 -> it.blockZ
-                            else -> -1
-                        }
-                    }.toString())
-                } else {
-                    return listOf()
-                }
+            in 2..4 -> if (sender is Entity) {
+                return listOf(sender.location.let {
+                    when (args.lastIndex) {
+                        2 -> it.blockX
+                        3 -> it.blockY
+                        4 -> it.blockZ
+                        else -> throw IllegalStateException()
+                    }
+                }.toString())
+            } else {
+                listOf()
             }
 
-            6 -> listOf("90", "0", "-90", "-180")
+            5 -> listOf("90", "0", "-90", "-180")
             else -> listOf()
         }.filter { it.startsWith(args.last()) }
     }

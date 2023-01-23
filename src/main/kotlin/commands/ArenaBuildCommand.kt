@@ -34,35 +34,39 @@ class ArenaBuildCommand(private val plugin: Chessed) : TabExecutor {
                     color = ChatColor.RED
                 }
             )
-        } else if (args[0] !in plugin.arenas.keys) {
+
+            return true
+        }
+
+        val arena = plugin.arenas[args[0]] ?: let {
             sender.spigot().sendMessage(
                 TextComponent("Argument <arena> must be an existing arena name!").apply {
                     color = ChatColor.RED
                 }
             )
-        } else {
-            val arena = plugin.arenas.getValue(args[0])
 
-            sender.spigot().sendMessage(
-                TextComponent("Building arena ${arena.name}...")
-            )
-
-            for (x in 0..<40) {
-                for (y in 0..<40) {
-                    val block = arena.getBlock(x, y, -1)
-
-                    block.type =
-                        if ((x / 5 + y / 5) % 2 == 0) Material.BLACK_CONCRETE
-                        else Material.WHITE_CONCRETE
-                }
-            }
-
-            sender.spigot().sendMessage(
-                TextComponent("Built arena ${arena.name}.").apply {
-                    color = ChatColor.GREEN
-                }
-            )
+            return true
         }
+
+        sender.spigot().sendMessage(
+            TextComponent("Building arena ${arena.name}...")
+        )
+
+        for (x in 0..<40) {
+            for (y in 0..<40) {
+                val block = arena.getBlock(x, y, -1)
+
+                block.type =
+                    if ((x / 5 + y / 5) % 2 == 0) Material.BLACK_CONCRETE
+                    else Material.WHITE_CONCRETE
+            }
+        }
+
+        sender.spigot().sendMessage(
+            TextComponent("Built arena ${arena.name}.").apply {
+                color = ChatColor.GREEN
+            }
+        )
 
         return true
     }

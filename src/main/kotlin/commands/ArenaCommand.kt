@@ -20,13 +20,13 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
         label: String,
         args: Array<out String>
     ): List<String> {
-        if (args.size == 1) {
-            return subcommands.keys.filter { it.startsWith(args.last()) }
+        return if (args.lastIndex == 0) {
+            subcommands.keys.filter { it.startsWith(args.last()) }
+        } else {
+            subcommands[args[0]]?.onTabComplete(
+                sender, command, label, args.sliceArray(1..args.lastIndex)
+            ) ?: listOf()
         }
-
-        return subcommands[args[0]]?.onTabComplete(
-            sender, command, label, args.copyOfRange(1, args.size)
-        ) ?: listOf()
     }
 
     override fun onCommand(
@@ -35,9 +35,12 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
         label: String,
         args: Array<out String>
     ): Boolean {
-        if (args.isNotEmpty() && args[0] in subcommands.keys) {
-            return subcommands.getValue(args[0]).onCommand(
-                sender, command, label, args.copyOfRange(1, args.size)
+        subcommands[args.getOrNull(0)]?.let {
+            return it.onCommand(
+                sender,
+                command,
+                label,
+                args.sliceArray(1..args.lastIndex)
             )
         }
 

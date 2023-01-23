@@ -32,15 +32,17 @@ class ArenaRemoveCommand(private val plugin: Chessed) : TabExecutor {
                     color = ChatColor.RED
                 }
             )
-        } else if (args[0] !in plugin.arenas.keys) {
+
+            return true
+        }
+
+        if (plugin.arenas.remove(args[0]) == null) {
             sender.spigot().sendMessage(
                 TextComponent("Argument <arena> must be an existing arena name!").apply {
                     color = ChatColor.RED
                 }
             )
         } else {
-            plugin.arenas.remove(args[0])
-
             sender.spigot().sendMessage(
                 TextComponent("Removed arena ${args[0]}.").apply {
                     color = ChatColor.GREEN
