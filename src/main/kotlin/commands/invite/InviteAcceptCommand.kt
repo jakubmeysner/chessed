@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
 import org.bukkit.entity.Player
 
-class InviteDeclineCommand(private val plugin: Chessed) : TabExecutor {
+class InviteAcceptCommand(private val plugin: Chessed) : TabExecutor {
     override fun onTabComplete(
         sender: CommandSender,
         command: Command,
@@ -32,13 +32,19 @@ class InviteDeclineCommand(private val plugin: Chessed) : TabExecutor {
     ): Boolean {
         if (sender !is Player) {
             sender.spigot().sendMessage(
-                TextComponent("This command may only be used by players!").apply {
+                TextComponent("This command may only be used by players").apply {
                     color = ChatColor.RED
                 }
             )
         } else if (args.size != 1) {
             sender.spigot().sendMessage(
-                TextComponent("Usage: /invite decline <player>").apply {
+                TextComponent("Usage: /invite accept <player>").apply {
+                    color = ChatColor.RED
+                }
+            )
+        } else if (plugin.games.any { it.whitePlayer == sender || it.blackPlayer == sender }) {
+            sender.spigot().sendMessage(
+                TextComponent("You can't invites because you're already in a game!").apply {
                     color = ChatColor.RED
                 }
             )
@@ -48,6 +54,12 @@ class InviteDeclineCommand(private val plugin: Chessed) : TabExecutor {
             if (player?.isOnline != true) {
                 sender.spigot().sendMessage(
                     TextComponent("Couldn't find an online player with given name!").apply {
+                        color = ChatColor.RED
+                    }
+                )
+            } else if (plugin.games.any { it.whitePlayer == player || it.blackPlayer == player }) {
+                sender.spigot().sendMessage(
+                    TextComponent("You can't accept the invite from this player because they're already in a game!").apply {
                         color = ChatColor.RED
                     }
                 )
@@ -61,12 +73,11 @@ class InviteDeclineCommand(private val plugin: Chessed) : TabExecutor {
                         }
                     )
                 } else {
-                    invite.decline()
+                    invite.accept()
                 }
             }
         }
 
         return true
     }
-
 }

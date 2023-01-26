@@ -19,7 +19,7 @@ commands:
     usage: /play <player> [rapid|blitz] [random|white|black]
 
   invite:
-    description: Controls an invite.
+    description: Controls invites.
     permission: chessed.play
     usage: |
       /invite (accept|decline|cancel) ...
