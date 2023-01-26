@@ -1,19 +1,15 @@
 package com.jakubmeysner.chessed.commands
 
-import com.jakubmeysner.chessed.Chessed
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
 
-class ArenaCommand(private val plugin: Chessed) : TabExecutor {
-    private val subcommands = mapOf(
-        "add" to ArenaAddCommand(plugin),
-        "build" to ArenaBuildCommand(plugin),
-        "remove" to ArenaRemoveCommand(plugin)
-    )
-
+abstract class ParentCommand(
+    val name: String,
+    private val subcommands: Map<String, TabExecutor>
+) : TabExecutor {
     override fun onTabComplete(
         sender: CommandSender,
         command: Command,
@@ -25,7 +21,7 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
         } else {
             subcommands[args[0]]?.onTabComplete(
                 sender, command, label, args.sliceArray(1..args.lastIndex)
-            ) ?: listOf()
+            ) ?: emptyList()
         }
     }
 
@@ -45,7 +41,11 @@ class ArenaCommand(private val plugin: Chessed) : TabExecutor {
         }
 
         sender.spigot().sendMessage(
-            TextComponent("Usage: /arena (${subcommands.keys.joinToString("|")}) ...").apply {
+            TextComponent(
+                "Usage: /$name (${
+                    subcommands.keys.joinToString("|")
+                }) ..."
+            ).apply {
                 color = ChatColor.RED
             }
         )
