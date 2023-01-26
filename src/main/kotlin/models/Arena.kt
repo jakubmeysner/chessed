@@ -1,6 +1,7 @@
 package com.jakubmeysner.chessed.models
 
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.block.Block
 
 class Arena(val name: String, val location: Location) {
@@ -22,5 +23,11 @@ class Arena(val name: String, val location: Location) {
                 else -> throw IllegalStateException()
             }
         )
+    }
+
+    companion object {
+        const val squareSide = 7
+        val whiteSquareMaterial = Material.WHITE_CONCRETE
+        val blackSquareMaterial = Material.BLACK_CONCRETE
     }
 }

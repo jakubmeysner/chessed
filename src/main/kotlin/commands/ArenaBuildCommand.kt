@@ -1,9 +1,9 @@
 package com.jakubmeysner.chessed.commands
 
 import com.jakubmeysner.chessed.Chessed
+import com.jakubmeysner.chessed.models.Arena
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.TextComponent
-import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
@@ -52,13 +52,13 @@ class ArenaBuildCommand(private val plugin: Chessed) : TabExecutor {
             TextComponent("Building arena ${arena.name}...")
         )
 
-        for (x in 0..<40) {
-            for (y in 0..<40) {
+        for (x in 0..<(Arena.squareSide * 8)) {
+            for (y in 0..<(Arena.squareSide * 8)) {
                 val block = arena.getBlock(x, y, -1)
 
                 block.type =
-                    if ((x / 5 + y / 5) % 2 == 0) Material.BLACK_CONCRETE
-                    else Material.WHITE_CONCRETE
+                    if ((x / Arena.squareSide + y / Arena.squareSide) % 2 == 0) Arena.blackSquareMaterial
+                    else Arena.whiteSquareMaterial
             }
         }
 
