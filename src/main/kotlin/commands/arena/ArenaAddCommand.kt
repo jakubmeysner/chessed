@@ -1,4 +1,4 @@
-package com.jakubmeysner.chessed.commands
+package com.jakubmeysner.chessed.commands.arena
 
 import com.jakubmeysner.chessed.Chessed
 import com.jakubmeysner.chessed.models.Arena
@@ -31,11 +31,11 @@ class ArenaAddCommand(private val plugin: Chessed) : TabExecutor {
                     }
                 }.toString())
             } else {
-                listOf()
+                emptyList()
             }
 
             5 -> listOf("90", "0", "-90", "-180")
-            else -> listOf()
+            else -> emptyList()
         }.filter { it.startsWith(args.last()) }
     }
 

@@ -13,10 +13,27 @@ commands:
       /arena build <arena>
       /arena remove <arena>
 
+  play:
+    description: Invites a player to a game.
+    permission: chessed.play
+    usage: /play <player> [rapid|blitz] [random|white|black]
+
+  invite:
+    description: Controls an invite.
+    permission: chessed.play
+    usage: |
+      /invite (accept|decline|cancel) ...
+      /invite accept <player>
+      /invite decline <player>
+      /invite cancel
+
 permissions:
   chessed.*:
     default: op
     children:
+      chessed.play: true
       chessed.arena: true
+  chessed.play:
+    default: true
   chessed.arena:
     default: op
