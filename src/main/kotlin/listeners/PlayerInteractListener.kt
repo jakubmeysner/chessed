@@ -11,6 +11,11 @@ class PlayerInteractListener(private val plugin: Chessed) : Listener {
     @Suppress("unused")
     fun onPlayerInteract(event: PlayerInteractEvent) {
         when (event.item) {
+            Game.drawItem -> {
+                event.isCancelled = true
+                event.player.performCommand("game draw offer")
+            }
+
             Game.resignItem -> {
                 event.isCancelled = true
                 event.player.performCommand("game resign")

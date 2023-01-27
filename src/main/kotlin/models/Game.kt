@@ -18,6 +18,9 @@ class Game(
 ) {
     val board = Board()
 
+    var drawOfferedByWhite = false
+    var drawOfferedByBlack = false
+
     init {
         plugin.games.add(this)
 
@@ -65,6 +68,26 @@ class Game(
             player.inventory.setItem(7, drawItem)
             player.inventory.setItem(8, resignItem)
         }
+    }
+
+    fun draw() {
+        listOf(whitePlayer, blackPlayer).forEach { player ->
+            player.sendTitle(
+                TextComponent("Draw").apply {
+                    color = ChatColor.GRAY
+                }.toLegacyText(),
+                "By agreement",
+                10, 70, 20
+            )
+
+            player.spigot().sendMessage(
+                TextComponent("The game has ended in a draw by agreement.").apply {
+                    color = ChatColor.GRAY
+                }
+            )
+        }
+
+        end()
     }
 
     fun resign(white: Boolean) {
