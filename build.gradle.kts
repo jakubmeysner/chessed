@@ -24,9 +24,12 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
         languageVersion = "1.8"
     }
 }

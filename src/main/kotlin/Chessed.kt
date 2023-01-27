@@ -4,7 +4,10 @@ import com.jakubmeysner.chessed.commands.arena.ArenaCommand
 import com.jakubmeysner.chessed.commands.game.GameCommand
 import com.jakubmeysner.chessed.commands.invite.InviteCommand
 import com.jakubmeysner.chessed.commands.play.PlayCommand
+import com.jakubmeysner.chessed.listeners.InventoryClickEventListener
+import com.jakubmeysner.chessed.listeners.PlayerDropItemListener
 import com.jakubmeysner.chessed.listeners.PlayerInteractListener
+import com.jakubmeysner.chessed.listeners.PlayerSwapHandItemsListener
 import com.jakubmeysner.chessed.models.Arena
 import com.jakubmeysner.chessed.models.Game
 import com.jakubmeysner.chessed.models.Invite
@@ -30,7 +33,10 @@ class Chessed : JavaPlugin() {
     )
 
     private val listeners = listOf(
-        PlayerInteractListener(this)
+        InventoryClickEventListener(this),
+        PlayerDropItemListener(this),
+        PlayerInteractListener(this),
+        PlayerSwapHandItemsListener(this)
     )
 
     private val arenasDataFile = dataFolder.resolve("arenas.json")
