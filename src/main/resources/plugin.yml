@@ -22,7 +22,10 @@ commands:
     description: Controls games.
     permission: chessed.play
     usage: |
-      /game (resign) ...
+      /game (draw|resign) ...
+      /game draw offer
+      /game draw accept
+      /game draw decline
       /game resign
 
   arena:

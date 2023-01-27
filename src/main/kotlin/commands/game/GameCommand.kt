@@ -6,6 +6,7 @@ import com.jakubmeysner.chessed.commands.ParentCommand
 class GameCommand(private val plugin: Chessed) : ParentCommand(
     "game",
     mapOf(
+        "draw" to GameDrawCommand(plugin),
         "resign" to GameResignCommand(plugin)
     )
 )
