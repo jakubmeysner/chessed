@@ -4,6 +4,7 @@ import com.jakubmeysner.chessed.commands.arena.ArenaCommand
 import com.jakubmeysner.chessed.commands.game.GameCommand
 import com.jakubmeysner.chessed.commands.invite.InviteCommand
 import com.jakubmeysner.chessed.commands.play.PlayCommand
+import com.jakubmeysner.chessed.listeners.PlayerInteractListener
 import com.jakubmeysner.chessed.models.Arena
 import com.jakubmeysner.chessed.models.Game
 import com.jakubmeysner.chessed.models.Invite
@@ -28,6 +29,10 @@ class Chessed : JavaPlugin() {
         "arena" to ArenaCommand(this)
     )
 
+    private val listeners = listOf(
+        PlayerInteractListener(this)
+    )
+
     private val arenasDataFile = dataFolder.resolve("arenas.json")
 
     override fun onEnable() {
@@ -36,6 +41,10 @@ class Chessed : JavaPlugin() {
         commands.forEach { (name, executor) ->
             getCommand(name)?.setExecutor(executor)
                 ?: throw Error("Command not registered")
+        }
+
+        listeners.forEach {
+            server.pluginManager.registerEvents(it, this)
         }
     }
 
