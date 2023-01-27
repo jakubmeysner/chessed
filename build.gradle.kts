@@ -19,8 +19,8 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0-RC")
-    compileOnly("org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT")
-    compileOnly("com.github.bhlangonijr:chesslib:1.3.3")
+    implementation("org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT")
+    implementation("com.github.bhlangonijr:chesslib:1.3.3")
     testImplementation(kotlin("test"))
 }
 
