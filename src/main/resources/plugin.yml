@@ -4,15 +4,6 @@ main: com.jakubmeysner.chessed.Chessed
 api-version: 1.19
 
 commands:
-  arena:
-    description: Controls arenas.
-    permission: chessed.arena
-    usage: |
-      /arena (add|build|remove) ...
-      /arena add <arena> [<worldName>] [<x>] [<y>] [<z>] [<yaw>]
-      /arena build <arena>
-      /arena remove <arena>
-
   play:
     description: Invites a player to a game.
     permission: chessed.play
@@ -26,6 +17,22 @@ commands:
       /invite accept <player>
       /invite decline <player>
       /invite cancel
+
+  game:
+    description: Controls games.
+    permission: chessed.play
+    usage: |
+      /game (resign) ...
+      /game resign
+
+  arena:
+    description: Controls arenas.
+    permission: chessed.arena
+    usage: |
+      /arena (add|build|remove) ...
+      /arena add <arena> [<worldName>] [<x>] [<y>] [<z>] [<yaw>]
+      /arena build <arena>
+      /arena remove <arena>
 
 permissions:
   chessed.*:

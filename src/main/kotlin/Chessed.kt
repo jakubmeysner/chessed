@@ -1,6 +1,7 @@
 package com.jakubmeysner.chessed
 
 import com.jakubmeysner.chessed.commands.arena.ArenaCommand
+import com.jakubmeysner.chessed.commands.game.GameCommand
 import com.jakubmeysner.chessed.commands.invite.InviteCommand
 import com.jakubmeysner.chessed.commands.play.PlayCommand
 import com.jakubmeysner.chessed.models.Arena
@@ -23,6 +24,7 @@ class Chessed : JavaPlugin() {
     private val commands = mapOf(
         "play" to PlayCommand(this),
         "invite" to InviteCommand(this),
+        "game" to GameCommand(this),
         "arena" to ArenaCommand(this)
     )
 

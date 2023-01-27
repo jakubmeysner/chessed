@@ -67,6 +67,52 @@ class Game(
         }
     }
 
+    fun resign(white: Boolean) {
+        val winner = if (white) blackPlayer else whitePlayer
+        val loser = if (white) whitePlayer else blackPlayer
+
+        winner.sendTitle(
+            TextComponent("Victory").apply {
+                color = ChatColor.GREEN
+            }.toLegacyText(),
+            "By resignation",
+            10, 70, 20
+        )
+
+        loser.sendTitle(
+            TextComponent("Defeat").apply {
+                color = ChatColor.RED
+            }.toLegacyText(),
+            "By resignation",
+            10, 70, 20
+        )
+
+        winner.spigot().sendMessage(
+            TextComponent("You won by resignation with ${loser.name}.").apply {
+                color = ChatColor.GREEN
+            }
+        )
+
+        loser.spigot().sendMessage(
+            TextComponent("You lost by resignation with ${winner.name}.").apply {
+                color = ChatColor.RED
+            }
+        )
+
+        end()
+    }
+
+    fun end() {
+        listOf(whitePlayer, blackPlayer).forEach { player ->
+            player.inventory.clear()
+            player.location.world?.spawnLocation?.let { player.teleport(it) }
+            player.isFlying = false
+            player.allowFlight = false
+        }
+
+        plugin.games.remove(this)
+    }
+
     companion object {
         val moveItem = ItemStack(Material.REDSTONE_TORCH).apply {
             itemMeta = itemMeta?.apply {
