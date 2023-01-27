@@ -4,11 +4,15 @@ import com.github.bhlangonijr.chesslib.Board
 import com.jakubmeysner.chessed.Chessed
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
+import org.bukkit.boss.BarColor
+import org.bukkit.boss.BarStyle
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.time.Duration
+import java.time.Instant
 
 class Game(
     private val plugin: Chessed,
@@ -19,8 +23,85 @@ class Game(
 ) {
     val board = Board()
 
+    val whiteTimeEnd: Instant? = Instant.now().plus(time.startDuration)
+    val whiteTimeLeft: Duration? = null
+    val blackTimeEnd: Instant? = null
+    val blackTimeLeft: Duration? = time.startDuration
+
+    val whiteBossBar = Bukkit
+        .createBossBar("", BarColor.WHITE, BarStyle.SEGMENTED_10)
+        .apply {
+            addPlayer(whitePlayer)
+            addPlayer(blackPlayer)
+        }
+
+    val blackBossBar = Bukkit
+        .createBossBar("", BarColor.PURPLE, BarStyle.SEGMENTED_10)
+        .apply {
+            addPlayer(whitePlayer)
+            addPlayer(blackPlayer)
+        }
+
     var drawOfferedByWhite = false
     var drawOfferedByBlack = false
+
+    val timeTask = plugin.runTaskTimer(0, 10) {
+        val whiteActualTimeLeft = if (whiteTimeEnd != null) {
+            Duration.between(Instant.now(), whiteTimeEnd)
+        } else {
+            whiteTimeLeft ?: Duration.ZERO
+        }
+
+        whiteBossBar.setTitle(
+            TextComponent("White Time Left: ").apply {
+                color = ChatColor.WHITE
+                isBold = true
+            }.toLegacyText() +
+                TextComponent(
+                    "${
+                        whiteActualTimeLeft.toMinutesPart().toString()
+                            .padStart(2, '0')
+                    }:${
+                        whiteActualTimeLeft.toSecondsPart().toString()
+                            .padStart(2, '0')
+                    }"
+                ).apply {
+                    color =
+                        if (whiteTimeEnd != null) ChatColor.YELLOW else ChatColor.GRAY
+                }.toLegacyText()
+        )
+
+        whiteBossBar.progress =
+            whiteActualTimeLeft.seconds.toDouble() / time.startDuration.seconds
+
+        val blackActualTimeLeft = if (blackTimeEnd != null) {
+            Duration.between(Instant.now(), blackTimeEnd)
+        } else {
+            blackTimeLeft ?: Duration.ZERO
+        }
+
+        blackBossBar.setTitle(
+            TextComponent("Black Time Left: ").apply {
+                color = ChatColor.DARK_GRAY
+                isBold = true
+            }.toLegacyText() +
+                TextComponent(
+                    "${
+                        blackActualTimeLeft.toMinutesPart().toString()
+                            .padStart(2, '0')
+                    }:${
+                        blackActualTimeLeft.toSecondsPart().toString()
+                            .padStart(2, '0')
+                    }"
+                ).apply {
+                    color =
+                        if (blackTimeEnd != null) ChatColor.YELLOW else ChatColor.GRAY
+                }.toLegacyText()
+        )
+
+        blackBossBar.progress =
+            blackActualTimeLeft.seconds.toDouble() / time.startDuration.seconds
+    }
 
     init {
         plugin.games.add(this)
@@ -129,6 +210,10 @@ class Game(
     }
 
     fun end() {
+        timeTask.cancel()
+        whiteBossBar.removeAll()
+        blackBossBar.removeAll()
+
         listOf(whitePlayer, blackPlayer).forEach { player ->
             player.inventory.clear()
             player.location.world?.spawnLocation?.let { player.teleport(it) }

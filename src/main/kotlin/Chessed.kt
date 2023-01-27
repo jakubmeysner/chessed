@@ -54,12 +54,16 @@ class Chessed : JavaPlugin() {
         }
     }
 
-    override fun onDisable() {
-        writeData()
-    }
-
     fun runTaskLater(delay: Long, runnable: () -> Unit): BukkitTask {
         return Bukkit.getScheduler().runTaskLater(this, runnable, delay)
+    }
+
+    fun runTaskTimer(
+        delay: Long,
+        period: Long,
+        runnable: () -> Unit
+    ): BukkitTask {
+        return Bukkit.getScheduler().runTaskTimer(this, runnable, delay, period)
     }
 
     private fun readData() {
