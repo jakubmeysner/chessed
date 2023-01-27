@@ -4,6 +4,7 @@ import com.github.bhlangonijr.chesslib.Board
 import com.jakubmeysner.chessed.Chessed
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -56,6 +57,7 @@ class Game(
                 }
             )
 
+            player.gameMode = GameMode.ADVENTURE
             player.allowFlight = true
             player.isFlying = true
 
