@@ -1,10 +1,19 @@
+@file:UseSerializers(LocationSerializer::class)
+
 package com.jakubmeysner.chessed.models
 
+import com.jakubmeysner.chessed.serializers.LocationSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
 
-class Arena(val name: String, val location: Location) {
+@Serializable
+class Arena(
+    val name: String,
+    val location: Location
+) {
     fun getBlock(x: Int, y: Int, z: Int): Block {
         return location.block.getRelative(
             when (location.yaw) {
