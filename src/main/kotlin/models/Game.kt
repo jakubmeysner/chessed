@@ -62,6 +62,7 @@ class Game(
             player.isFlying = true
 
             player.inventory.clear()
+            player.inventory.heldItemSlot = 0
 
             if (white) {
                 player.inventory.setItem(0, moveItem)
