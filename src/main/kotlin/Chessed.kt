@@ -20,24 +20,16 @@ class Chessed : JavaPlugin() {
     val invites = mutableMapOf<Player, Invite>()
     val games = mutableListOf<Game>()
 
-    private val arenasFile = dataFolder.resolve("arenas.json")
-
     private val commands = mapOf(
         "play" to PlayCommand(this),
         "invite" to InviteCommand(this),
         "arena" to ArenaCommand(this)
     )
 
-    override fun onEnable() {
-        if (!dataFolder.isDirectory) {
-            dataFolder.mkdir()
-        }
+    private val arenasDataFile = dataFolder.resolve("arenas.json")
 
-        if (arenasFile.exists()) {
-            Json.decodeFromString<List<Arena>>(arenasFile.readText()).forEach {
-                arenas[it.name] = it
-            }
-        }
+    override fun onEnable() {
+        readData()
 
         commands.forEach { (name, executor) ->
             getCommand(name)?.setExecutor(executor)
@@ -46,14 +38,30 @@ class Chessed : JavaPlugin() {
     }
 
     override fun onDisable() {
-        if (!dataFolder.isDirectory) {
-            dataFolder.mkdir()
-        }
-
-        arenasFile.writeText(Json.encodeToString(arenas.values))
+        writeData()
     }
 
     fun runTaskLater(delay: Long, runnable: () -> Unit): BukkitTask {
         return Bukkit.getScheduler().runTaskLater(this, runnable, delay)
+    }
+
+    private fun readData() {
+        if (!dataFolder.isDirectory) {
+            dataFolder.mkdir()
+        }
+
+        if (arenasDataFile.isFile) {
+            Json.decodeFromString<List<Arena>>(arenasDataFile.readText()).forEach {
+                arenas[it.name] = it
+            }
+        }
+    }
+
+    private fun writeData() {
+        if (!dataFolder.isDirectory) {
+            dataFolder.mkdir()
+        }
+
+        arenasDataFile.writeText(Json.encodeToString(arenas.values.toList()))
     }
 }
