@@ -62,9 +62,10 @@ class Chessed : JavaPlugin() {
         }
 
         if (arenasDataFile.isFile) {
-            Json.decodeFromString<List<Arena>>(arenasDataFile.readText()).forEach {
-                arenas[it.name] = it
-            }
+            Json.decodeFromString<List<Arena>>(arenasDataFile.readText())
+                .forEach {
+                    arenas[it.name] = it
+                }
         }
     }
 

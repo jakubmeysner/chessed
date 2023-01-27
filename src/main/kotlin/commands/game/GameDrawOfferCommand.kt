@@ -99,7 +99,7 @@ class GameDrawOfferCommand(private val plugin: Chessed) : TabExecutor {
                 )
 
                 sender.spigot().sendMessage(
-                    TextComponent("You've offered a draw.").apply{
+                    TextComponent("You've offered a draw.").apply {
                         color = ChatColor.GREEN
                     }
                 )
