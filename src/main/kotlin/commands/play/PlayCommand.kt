@@ -22,6 +22,12 @@ class PlayCommand(private val plugin: Chessed) : TabExecutor {
         args: Array<out String>
     ): List<String> {
         return when (args.lastIndex) {
+            0 -> Bukkit.getOnlinePlayers().filter { player ->
+                player != sender && plugin.games.none {
+                    it.whitePlayer == player || it.blackPlayer == player
+                }
+            }.map { it.name }
+
             1 -> timeOptions
             2 -> playAsOptions
             else -> emptyList()
@@ -89,7 +95,13 @@ class PlayCommand(private val plugin: Chessed) : TabExecutor {
         } else {
             val player = Bukkit.getPlayer(args[0])
 
-            if (player?.isOnline != true) {
+            if (player == sender) {
+                sender.spigot().sendMessage(
+                    TextComponent("You can't play with yourself!").apply {
+                        color = ChatColor.RED
+                    }
+                )
+            } else if (player?.isOnline != true) {
                 sender.spigot().sendMessage(
                     TextComponent("Couldn't find an online player with given name!").apply {
                         color = ChatColor.RED
