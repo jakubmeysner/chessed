@@ -209,11 +209,17 @@ class Game(
                 whiteTimeLeft = null
                 blackTimeLeft = Duration.between(Instant.now(), blackTimeEnd)
                 blackTimeEnd = null
+
+                whitePlayer.inventory.setItem(0, moveItem)
+                blackPlayer.inventory.setItem(0, null)
             } else {
                 blackTimeEnd = Instant.now().plus(blackTimeLeft)
                 blackTimeLeft = null
                 whiteTimeLeft = Duration.between(Instant.now(), whiteTimeEnd)
                 whiteTimeEnd = null
+
+                whitePlayer.inventory.setItem(0, null)
+                blackPlayer.inventory.setItem(0, moveItem)
             }
         }
     }
