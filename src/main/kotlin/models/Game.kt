@@ -193,6 +193,9 @@ class Game(
     fun move(move: Move) {
         board.doMove(move)
 
+        drawOfferedByWhite = false
+        drawOfferedByBlack = false
+
         buildPieces()
 
         if (board.isMated) {
