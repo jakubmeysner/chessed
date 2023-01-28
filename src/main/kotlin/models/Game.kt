@@ -3,6 +3,7 @@ package com.jakubmeysner.chessed.models
 import com.github.bhlangonijr.chesslib.Board
 import com.jakubmeysner.chessed.Chessed
 import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -11,6 +12,7 @@ import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import java.net.URLEncoder
 import java.time.Duration
 import java.time.Instant
 
@@ -22,6 +24,14 @@ class Game(
     val time: Time
 ) {
     val board = Board()
+
+    val analysisLink: String
+        get() = "https://chess.com/analysis?fen=${
+            URLEncoder.encode(
+                board.fen,
+                "UTF-8"
+            )
+        }"
 
     val whiteTimeEnd: Instant? = Instant.now().plus(time.startDuration)
     val whiteTimeLeft: Duration? = null
@@ -101,6 +111,48 @@ class Game(
 
         blackBossBar.progress =
             blackActualTimeLeft.seconds.toDouble() / time.startDuration.seconds
+
+        val loser = if (whiteTimeEnd != null && whiteTimeEnd <= Instant.now()) {
+            whitePlayer
+        } else if (blackTimeEnd != null && blackTimeEnd <= Instant.now()) {
+            blackPlayer
+        } else {
+            null
+        }
+
+        if (loser != null) {
+            val winner = if (loser == whitePlayer) blackPlayer else whitePlayer
+
+            winner.sendTitle(
+                TextComponent("Victory").apply {
+                    color = ChatColor.GREEN
+                }.toLegacyText(),
+                "On time",
+                10, 70, 20
+            )
+
+            loser.sendTitle(
+                TextComponent("Defeat").apply {
+                    color = ChatColor.RED
+                }.toLegacyText(),
+                "On time",
+                10, 70, 20
+            )
+
+            winner.spigot().sendMessage(
+                TextComponent("You won on time with ${loser.name}.").apply {
+                    color = ChatColor.GREEN
+                }
+            )
+
+            loser.spigot().sendMessage(
+                TextComponent("You lost on time with ${winner.name}.").apply {
+                    color = ChatColor.RED
+                }
+            )
+
+            end()
+        }
     }
 
     init {
@@ -215,6 +267,17 @@ class Game(
         blackBossBar.removeAll()
 
         listOf(whitePlayer, blackPlayer).forEach { player ->
+            player.spigot().sendMessage(
+                TextComponent("Open analysis on Chess.com.").apply {
+                    color = ChatColor.BLUE
+                    isUnderlined = true
+                    clickEvent = ClickEvent(
+                        ClickEvent.Action.OPEN_URL,
+                        "$analysisLink&flip=${player == blackPlayer}"
+                    )
+                }
+            )
+
             player.inventory.clear()
             player.location.world?.spawnLocation?.let { player.teleport(it) }
             player.isFlying = false
