@@ -23,14 +23,14 @@ class Arena(
                 -180F -> x
                 else -> throw IllegalStateException()
             },
-            z,
             when (location.yaw) {
                 90F -> -x
                 0F -> y
                 -90F -> x
                 -180F -> -y
                 else -> throw IllegalStateException()
-            }
+            },
+            z
         )
     }
 
