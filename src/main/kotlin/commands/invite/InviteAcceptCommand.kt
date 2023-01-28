@@ -21,7 +21,7 @@ class InviteAcceptCommand(private val plugin: Chessed) : TabExecutor {
                 .map { it.inviter.name }
 
             else -> emptyList()
-        }.filter { it.startsWith(args.last()) }
+        }.filter { it.lowercase().startsWith(args.last().lowercase()) }
     }
 
     override fun onCommand(

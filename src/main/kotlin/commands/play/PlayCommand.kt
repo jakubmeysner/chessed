@@ -31,7 +31,7 @@ class PlayCommand(private val plugin: Chessed) : TabExecutor {
             1 -> timeOptions
             2 -> playAsOptions
             else -> emptyList()
-        }.filter { it.startsWith(args.last()) }
+        }.filter { it.lowercase().startsWith(args.last().lowercase()) }
     }
 
     override fun onCommand(
