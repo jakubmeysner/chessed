@@ -2,6 +2,7 @@ package com.jakubmeysner.chessed.models
 
 import com.github.bhlangonijr.chesslib.Board
 import com.github.bhlangonijr.chesslib.Side
+import com.github.bhlangonijr.chesslib.Square
 import com.github.bhlangonijr.chesslib.move.Move
 import com.jakubmeysner.chessed.Chessed
 import net.md_5.bungee.api.ChatColor
@@ -152,7 +153,7 @@ class Game(
             player.teleport(
                 arena.getBlock(
                     Arena.squareSide * 4 + Arena.squareSide / 2,
-                    10,
+                    20,
                     Arena.squareSide * (if (white) 0 else 7) + Arena.squareSide / 2
                 ).location.apply {
                     yaw =
@@ -175,10 +176,23 @@ class Game(
             player.inventory.setItem(7, drawItem)
             player.inventory.setItem(8, resignItem)
         }
+
+        buildPieces()
+    }
+
+    fun buildPieces() {
+        Square.values().forEach { square ->
+            if (square != Square.NONE) {
+                val piece = board.getPiece(square)
+                arena.buildPiece(square, piece)
+            }
+        }
     }
 
     fun move(move: Move) {
         board.doMove(move)
+
+        buildPieces()
 
         if (board.isMated) {
             win(board.sideToMove == Side.BLACK, "by checkmate")
@@ -207,16 +221,18 @@ class Game(
             if (board.sideToMove == Side.WHITE) {
                 whiteTimeEnd = Instant.now().plus(whiteTimeLeft)
                 whiteTimeLeft = null
-                blackTimeLeft = Duration.between(Instant.now(), blackTimeEnd)
                 blackTimeEnd = null
+                blackTimeLeft = Duration.between(Instant.now(), blackTimeEnd)
+                    .plus(time.incrementDuration)
 
                 whitePlayer.inventory.setItem(0, moveItem)
                 blackPlayer.inventory.setItem(0, null)
             } else {
                 blackTimeEnd = Instant.now().plus(blackTimeLeft)
                 blackTimeLeft = null
-                whiteTimeLeft = Duration.between(Instant.now(), whiteTimeEnd)
                 whiteTimeEnd = null
+                whiteTimeLeft = Duration.between(Instant.now(), whiteTimeEnd)
+                    .plus(time.incrementDuration)
 
                 whitePlayer.inventory.setItem(0, null)
                 blackPlayer.inventory.setItem(0, moveItem)

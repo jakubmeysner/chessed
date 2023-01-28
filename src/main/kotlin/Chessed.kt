@@ -86,4 +86,9 @@ class Chessed : JavaPlugin() {
 
         arenasDataFile.writeText(Json.encodeToString(arenas.values.toList()))
     }
+
+    companion object {
+        val instance
+            get() = getPlugin(Chessed::class.java)
+    }
 }

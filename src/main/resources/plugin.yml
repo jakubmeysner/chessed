@@ -2,6 +2,7 @@ name: Chessed
 version: $version
 main: com.jakubmeysner.chessed.Chessed
 api-version: 1.19
+depend: [WorldEdit]
 
 commands:
   play:
