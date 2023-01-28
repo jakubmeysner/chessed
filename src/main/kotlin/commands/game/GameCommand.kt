@@ -7,6 +7,7 @@ class GameCommand(private val plugin: Chessed) : ParentCommand(
     "game",
     mapOf(
         "move" to GameMoveCommand(plugin),
+        "menu" to GameMenuCommand(plugin),
         "draw" to GameDrawCommand(plugin),
         "resign" to GameResignCommand(plugin)
     )

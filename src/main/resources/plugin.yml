@@ -25,6 +25,7 @@ commands:
     usage: |
       /game (move|draw|resign) ...
       /game move <from> <to> [<promoteTo>]
+      /game menu
       /game draw offer
       /game draw accept
       /game draw decline

@@ -1,6 +1,7 @@
 package com.jakubmeysner.chessed.models
 
 import com.github.bhlangonijr.chesslib.Board
+import com.github.bhlangonijr.chesslib.Piece
 import com.github.bhlangonijr.chesslib.Side
 import com.github.bhlangonijr.chesslib.Square
 import com.github.bhlangonijr.chesslib.move.Move
@@ -12,6 +13,7 @@ import org.bukkit.*
 import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
 import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import java.net.URLEncoder
 import java.time.Duration
@@ -52,6 +54,9 @@ class Game(
             addPlayer(whitePlayer)
             addPlayer(blackPlayer)
         }
+
+    var whiteMenuInventory: Inventory? = null
+    var blackMenuInventory: Inventory? = null
 
     var drawOfferedByWhite = false
     var drawOfferedByBlack = false
@@ -376,6 +381,125 @@ class Game(
                 )
             }
         }
+
+        val emptySpaceItem = ItemStack(
+            Material.BLACK_STAINED_GLASS_PANE
+        ).apply {
+            itemMeta = itemMeta?.apply {
+                setDisplayName("")
+            }
+        }
+
+        val pieceItems = mapOf(
+            Piece.WHITE_PAWN to ItemStack(Material.BIRCH_BUTTON).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("White Pawn").apply {
+                            color = ChatColor.WHITE
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.WHITE_ROOK to ItemStack(Material.WHITE_CANDLE).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("White Rook").apply {
+                            color = ChatColor.WHITE
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.WHITE_KNIGHT to ItemStack(Material.IRON_HORSE_ARMOR).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("White Knight").apply {
+                            color = ChatColor.WHITE
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.WHITE_BISHOP to ItemStack(Material.ARROW).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("White Bishop").apply {
+                            color = ChatColor.WHITE
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.WHITE_QUEEN to ItemStack(Material.IRON_INGOT).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("White Queen").apply {
+                            color = ChatColor.WHITE
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.WHITE_KING to ItemStack(Material.IRON_BLOCK).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("White King").apply {
+                            color = ChatColor.WHITE
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.BLACK_PAWN to ItemStack(Material.POLISHED_BLACKSTONE_BUTTON).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("Black Pawn").apply {
+                            color = ChatColor.DARK_GRAY
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.BLACK_ROOK to ItemStack(Material.BLACK_CANDLE).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("Black Rook").apply {
+                            color = ChatColor.DARK_GRAY
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.BLACK_KNIGHT to ItemStack(Material.LEATHER_HORSE_ARMOR).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("Black Knight").apply {
+                            color = ChatColor.DARK_GRAY
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.BLACK_BISHOP to ItemStack(Material.TIPPED_ARROW).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("Black Pawn").apply {
+                            color = ChatColor.DARK_GRAY
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.BLACK_QUEEN to ItemStack(Material.NETHERITE_INGOT).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("Black Queen").apply {
+                            color = ChatColor.DARK_GRAY
+                        }.toLegacyText()
+                    )
+                }
+            },
+            Piece.BLACK_KING to ItemStack(Material.NETHERITE_BLOCK).apply {
+                itemMeta = itemMeta?.apply {
+                    setDisplayName(
+                        TextComponent("Black King").apply {
+                            color = ChatColor.DARK_GRAY
+                        }.toLegacyText()
+                    )
+                }
+            }
+        )
     }
 
     enum class Time(
