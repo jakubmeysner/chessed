@@ -1,13 +1,13 @@
 package com.jakubmeysner.chessed.models
 
 import com.github.bhlangonijr.chesslib.Board
+import com.github.bhlangonijr.chesslib.Side
+import com.github.bhlangonijr.chesslib.move.Move
 import com.jakubmeysner.chessed.Chessed
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.TextComponent
-import org.bukkit.Bukkit
-import org.bukkit.GameMode
-import org.bukkit.Material
+import org.bukkit.*
 import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
 import org.bukkit.entity.Player
@@ -33,10 +33,10 @@ class Game(
             )
         }"
 
-    val whiteTimeEnd: Instant? = Instant.now().plus(time.startDuration)
-    val whiteTimeLeft: Duration? = null
-    val blackTimeEnd: Instant? = null
-    val blackTimeLeft: Duration? = time.startDuration
+    var whiteTimeEnd: Instant? = Instant.now().plus(time.startDuration)
+    var whiteTimeLeft: Duration? = null
+    var blackTimeEnd: Instant? = null
+    var blackTimeLeft: Duration? = time.startDuration
 
     val whiteBossBar = Bukkit
         .createBossBar("", BarColor.WHITE, BarStyle.SEGMENTED_10)
@@ -56,102 +56,73 @@ class Game(
     var drawOfferedByBlack = false
 
     val timeTask = plugin.runTaskTimer(0, 10) {
-        val whiteActualTimeLeft = if (whiteTimeEnd != null) {
-            Duration.between(Instant.now(), whiteTimeEnd)
-        } else {
-            whiteTimeLeft ?: Duration.ZERO
-        }
-
-        whiteBossBar.setTitle(
-            TextComponent("White Time Left: ").apply {
-                color = ChatColor.WHITE
-                isBold = true
-            }.toLegacyText() +
-                TextComponent(
-                    "${
-                        whiteActualTimeLeft.toMinutesPart().toString()
-                            .padStart(2, '0')
-                    }:${
-                        whiteActualTimeLeft.toSecondsPart().toString()
-                            .padStart(2, '0')
-                    }"
-                ).apply {
-                    color =
-                        if (whiteTimeEnd != null) ChatColor.YELLOW else ChatColor.GRAY
-                }.toLegacyText()
-        )
-
-        whiteBossBar.progress =
-            whiteActualTimeLeft.seconds.toDouble() / time.startDuration.seconds
-
-        val blackActualTimeLeft = if (blackTimeEnd != null) {
-            Duration.between(Instant.now(), blackTimeEnd)
-        } else {
-            blackTimeLeft ?: Duration.ZERO
-        }
-
-        blackBossBar.setTitle(
-            TextComponent("Black Time Left: ").apply {
-                color = ChatColor.DARK_GRAY
-                isBold = true
-            }.toLegacyText() +
-                TextComponent(
-                    "${
-                        blackActualTimeLeft.toMinutesPart().toString()
-                            .padStart(2, '0')
-                    }:${
-                        blackActualTimeLeft.toSecondsPart().toString()
-                            .padStart(2, '0')
-                    }"
-                ).apply {
-                    color =
-                        if (blackTimeEnd != null) ChatColor.YELLOW else ChatColor.GRAY
-                }.toLegacyText()
-        )
-
-        blackBossBar.progress =
-            blackActualTimeLeft.seconds.toDouble() / time.startDuration.seconds
-
-        val loser = if (whiteTimeEnd != null && whiteTimeEnd <= Instant.now()) {
-            whitePlayer
-        } else if (blackTimeEnd != null && blackTimeEnd <= Instant.now()) {
-            blackPlayer
-        } else {
-            null
-        }
+        val loser =
+            if (whiteTimeEnd?.isBefore(Instant.now()) == true) {
+                whitePlayer
+            } else if (blackTimeEnd?.isBefore(Instant.now()) == true) {
+                blackPlayer
+            } else {
+                null
+            }
 
         if (loser != null) {
-            val winner = if (loser == whitePlayer) blackPlayer else whitePlayer
+            win(loser != whitePlayer, "on time")
+        } else {
+            val whiteActualTimeLeft = if (whiteTimeEnd != null) {
+                Duration.between(Instant.now(), whiteTimeEnd)
+            } else {
+                whiteTimeLeft ?: Duration.ZERO
+            }
 
-            winner.sendTitle(
-                TextComponent("Victory").apply {
-                    color = ChatColor.GREEN
-                }.toLegacyText(),
-                "On time",
-                10, 70, 20
+            whiteBossBar.setTitle(
+                TextComponent("White Time Left: ").apply {
+                    color = ChatColor.WHITE
+                    isBold = true
+                }.toLegacyText() +
+                    TextComponent(
+                        "${
+                            whiteActualTimeLeft.toMinutesPart().toString()
+                                .padStart(2, '0')
+                        }:${
+                            whiteActualTimeLeft.toSecondsPart().toString()
+                                .padStart(2, '0')
+                        }"
+                    ).apply {
+                        color =
+                            if (whiteTimeEnd != null) ChatColor.YELLOW else ChatColor.GRAY
+                    }.toLegacyText()
             )
 
-            loser.sendTitle(
-                TextComponent("Defeat").apply {
-                    color = ChatColor.RED
-                }.toLegacyText(),
-                "On time",
-                10, 70, 20
+            whiteBossBar.progress =
+                whiteActualTimeLeft.seconds.toDouble() / time.startDuration.seconds
+
+            val blackActualTimeLeft = if (blackTimeEnd != null) {
+                Duration.between(Instant.now(), blackTimeEnd)
+            } else {
+                blackTimeLeft ?: Duration.ZERO
+            }
+
+            blackBossBar.setTitle(
+                TextComponent("Black Time Left: ").apply {
+                    color = ChatColor.DARK_GRAY
+                    isBold = true
+                }.toLegacyText() +
+                    TextComponent(
+                        "${
+                            blackActualTimeLeft.toMinutesPart().toString()
+                                .padStart(2, '0')
+                        }:${
+                            blackActualTimeLeft.toSecondsPart().toString()
+                                .padStart(2, '0')
+                        }"
+                    ).apply {
+                        color =
+                            if (blackTimeEnd != null) ChatColor.YELLOW else ChatColor.GRAY
+                    }.toLegacyText()
             )
 
-            winner.spigot().sendMessage(
-                TextComponent("You won on time with ${loser.name}.").apply {
-                    color = ChatColor.GREEN
-                }
-            )
-
-            loser.spigot().sendMessage(
-                TextComponent("You lost on time with ${winner.name}.").apply {
-                    color = ChatColor.RED
-                }
-            )
-
-            end()
+            blackBossBar.progress =
+                blackActualTimeLeft.seconds.toDouble() / time.startDuration.seconds
         }
     }
 
@@ -181,8 +152,8 @@ class Game(
             player.teleport(
                 arena.getBlock(
                     Arena.squareSide * 4 + Arena.squareSide / 2,
-                    Arena.squareSide * (if (white) 0 else 7) + Arena.squareSide / 2,
-                    10
+                    10,
+                    Arena.squareSide * (if (white) 0 else 7) + Arena.squareSide / 2
                 ).location.apply {
                     yaw =
                         if (white) arena.location.yaw
@@ -206,35 +177,56 @@ class Game(
         }
     }
 
-    fun draw() {
-        listOf(whitePlayer, blackPlayer).forEach { player ->
-            player.sendTitle(
-                TextComponent("Draw").apply {
-                    color = ChatColor.GRAY
-                }.toLegacyText(),
-                "By agreement",
-                10, 70, 20
-            )
+    fun move(move: Move) {
+        board.doMove(move)
 
-            player.spigot().sendMessage(
-                TextComponent("The game has ended in a draw by agreement.").apply {
-                    color = ChatColor.GRAY
+        if (board.isMated) {
+            win(board.sideToMove == Side.BLACK, "by checkmate")
+        } else if (board.isDraw) {
+            draw(
+                if (board.isStaleMate) {
+                    "by stalemate"
+                } else if (board.isRepetition) {
+                    "by repetition"
+                } else if (board.isInsufficientMaterial) {
+                    "by insufficient material"
+                } else {
+                    "by fifty-move rule"
                 }
             )
-        }
+        } else {
+            listOf(whitePlayer, blackPlayer).forEach {
+                it.playNote(
+                    it.location,
+                    if (board.isKingAttacked) Instrument.BANJO
+                    else Instrument.BASS_DRUM,
+                    Note.flat(0, Note.Tone.A)
+                )
+            }
 
-        end()
+            if (board.sideToMove == Side.WHITE) {
+                whiteTimeEnd = Instant.now().plus(whiteTimeLeft)
+                whiteTimeLeft = null
+                blackTimeLeft = Duration.between(Instant.now(), blackTimeEnd)
+                blackTimeEnd = null
+            } else {
+                blackTimeEnd = Instant.now().plus(blackTimeLeft)
+                blackTimeLeft = null
+                whiteTimeLeft = Duration.between(Instant.now(), whiteTimeEnd)
+                whiteTimeEnd = null
+            }
+        }
     }
 
-    fun resign(white: Boolean) {
-        val winner = if (white) blackPlayer else whitePlayer
-        val loser = if (white) whitePlayer else blackPlayer
+    fun win(white: Boolean, reason: String) {
+        val winner = if (white) whitePlayer else blackPlayer
+        val loser = if (white) blackPlayer else whitePlayer
 
         winner.sendTitle(
             TextComponent("Victory").apply {
                 color = ChatColor.GREEN
             }.toLegacyText(),
-            "By resignation",
+            reason.replaceFirstChar { it.uppercase() },
             10, 70, 20
         )
 
@@ -242,23 +234,67 @@ class Game(
             TextComponent("Defeat").apply {
                 color = ChatColor.RED
             }.toLegacyText(),
-            "By resignation",
+            reason.replaceFirstChar { it.uppercase() },
             10, 70, 20
         )
 
         winner.spigot().sendMessage(
-            TextComponent("You won by resignation with ${loser.name}.").apply {
+            TextComponent("You won $reason with ${loser.name}.").apply {
                 color = ChatColor.GREEN
             }
         )
 
         loser.spigot().sendMessage(
-            TextComponent("You lost by resignation with ${winner.name}.").apply {
+            TextComponent("You lost $reason with ${winner.name}.").apply {
                 color = ChatColor.RED
             }
         )
 
         end()
+
+        winner.playNote(
+            winner.location,
+            Instrument.BELL,
+            Note.natural(1, Note.Tone.A)
+        )
+
+        loser.playNote(
+            loser.location,
+            Instrument.GUITAR,
+            Note.natural(1, Note.Tone.A)
+        )
+    }
+
+    fun draw(reason: String) {
+        listOf(whitePlayer, blackPlayer).forEach { player ->
+            player.sendTitle(
+                TextComponent("Draw").apply {
+                    color = ChatColor.GRAY
+                }.toLegacyText(),
+                reason.replaceFirstChar { it.uppercase() },
+                10, 70, 20
+            )
+
+            player.spigot().sendMessage(
+                TextComponent("The game has ended in a draw $reason.").apply {
+                    color = ChatColor.GRAY
+                }
+            )
+        }
+
+        end()
+
+        listOf(whitePlayer, blackPlayer).forEach { player ->
+            player.playNote(
+                player.location,
+                Instrument.SNARE_DRUM,
+                Note.natural(1, Note.Tone.A)
+            )
+        }
+    }
+
+    fun resign(white: Boolean) {
+        win(!white, "by resignation")
     }
 
     fun end() {

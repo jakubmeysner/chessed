@@ -22,7 +22,8 @@ commands:
     description: Controls games.
     permission: chessed.play
     usage: |
-      /game (draw|resign) ...
+      /game (move|draw|resign) ...
+      /game move <from> <to> [<promoteTo>]
       /game draw offer
       /game draw accept
       /game draw decline

@@ -57,7 +57,7 @@ class GameDrawAcceptCommand(private val plugin: Chessed) : TabExecutor {
                     }
                 )
             } else {
-                game.draw()
+                game.draw("by agreement")
             }
         }
 

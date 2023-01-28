@@ -53,11 +53,11 @@ class ArenaBuildCommand(private val plugin: Chessed) : TabExecutor {
         )
 
         for (x in 0..<(Arena.squareSide * 8)) {
-            for (y in 0..<(Arena.squareSide * 8)) {
-                val block = arena.getBlock(x, y, -1)
+            for (z in 0..<(Arena.squareSide * 8)) {
+                val block = arena.getBlock(x, -1, z)
 
                 block.type =
-                    if ((x / Arena.squareSide + y / Arena.squareSide) % 2 == 0) Arena.blackSquareMaterial
+                    if ((x / Arena.squareSide + z / Arena.squareSide) % 2 == 0) Arena.blackSquareMaterial
                     else Arena.whiteSquareMaterial
             }
         }

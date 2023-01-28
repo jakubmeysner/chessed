@@ -61,7 +61,7 @@ class GameDrawOfferCommand(private val plugin: Chessed) : TabExecutor {
                 (sender == game.whitePlayer && game.drawOfferedByBlack) ||
                 (sender == game.blackPlayer && game.drawOfferedByWhite)
             ) {
-                game.draw()
+                game.draw("by agreement")
             } else {
                 if (sender == game.whitePlayer) {
                     game.drawOfferedByWhite = true
