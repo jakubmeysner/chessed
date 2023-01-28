@@ -173,6 +173,7 @@ class Game(
                 player.inventory.setItem(0, moveItem)
             }
 
+            player.inventory.setItem(1, historyItem)
             player.inventory.setItem(7, drawItem)
             player.inventory.setItem(8, resignItem)
         }
@@ -221,18 +222,18 @@ class Game(
             if (board.sideToMove == Side.WHITE) {
                 whiteTimeEnd = Instant.now().plus(whiteTimeLeft)
                 whiteTimeLeft = null
-                blackTimeEnd = null
                 blackTimeLeft = Duration.between(Instant.now(), blackTimeEnd)
                     .plus(time.incrementDuration)
+                blackTimeEnd = null
 
                 whitePlayer.inventory.setItem(0, moveItem)
                 blackPlayer.inventory.setItem(0, null)
             } else {
                 blackTimeEnd = Instant.now().plus(blackTimeLeft)
                 blackTimeLeft = null
-                whiteTimeEnd = null
                 whiteTimeLeft = Duration.between(Instant.now(), whiteTimeEnd)
                     .plus(time.incrementDuration)
+                whiteTimeEnd = null
 
                 whitePlayer.inventory.setItem(0, null)
                 blackPlayer.inventory.setItem(0, moveItem)
@@ -352,6 +353,16 @@ class Game(
                 setDisplayName(
                     TextComponent("Move").apply {
                         color = ChatColor.AQUA
+                    }.toLegacyText()
+                )
+            }
+        }
+
+        val historyItem = ItemStack(Material.BOOK).apply {
+            itemMeta = itemMeta?.apply {
+                setDisplayName(
+                    TextComponent("History").apply {
+                        color = ChatColor.GOLD
                     }.toLegacyText()
                 )
             }

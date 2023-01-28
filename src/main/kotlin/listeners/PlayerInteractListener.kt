@@ -23,6 +23,10 @@ class PlayerInteractListener(private val plugin: Chessed) : Listener {
                 event.action == Action.RIGHT_CLICK_BLOCK
             ) {
                 when (event.item) {
+                    Game.historyItem -> {
+                        event.player.performCommand("game history")
+                    }
+
                     Game.drawItem -> {
                         event.player.performCommand("game draw offer")
                     }
