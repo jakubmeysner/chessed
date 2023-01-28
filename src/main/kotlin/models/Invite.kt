@@ -43,7 +43,7 @@ class Invite(
             TextComponent("You've been invited to a game by ${inviter.name}.\n").apply {
                 color = ChatColor.AQUA
             },
-            TextComponent("[ACCEPT]").apply {
+            TextComponent("[Accept]").apply {
                 color = ChatColor.GREEN
                 isBold = true
 
@@ -53,7 +53,7 @@ class Invite(
                 )
             },
             TextComponent(" "),
-            TextComponent("[DECLINE]").apply {
+            TextComponent("[Decline]").apply {
                 color = ChatColor.RED
                 isBold = true
 

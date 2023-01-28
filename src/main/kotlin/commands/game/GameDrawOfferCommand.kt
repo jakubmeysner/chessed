@@ -77,7 +77,7 @@ class GameDrawOfferCommand(private val plugin: Chessed) : TabExecutor {
                     TextComponent("You've been offered a draw.\n").apply {
                         color = ChatColor.AQUA
                     },
-                    TextComponent("[ACCEPT]").apply {
+                    TextComponent("[Accept]").apply {
                         color = ChatColor.YELLOW
                         isBold = true
 
@@ -87,7 +87,7 @@ class GameDrawOfferCommand(private val plugin: Chessed) : TabExecutor {
                         )
                     },
                     TextComponent(" "),
-                    TextComponent("[DECLINE]").apply {
+                    TextComponent("[Decline]").apply {
                         color = ChatColor.GRAY
                         isBold = true
 

@@ -268,9 +268,10 @@ class Game(
 
         listOf(whitePlayer, blackPlayer).forEach { player ->
             player.spigot().sendMessage(
-                TextComponent("Open analysis on Chess.com.").apply {
+                TextComponent("[Open analysis]").apply {
                     color = ChatColor.BLUE
-                    isUnderlined = true
+                    isBold = true
+
                     clickEvent = ClickEvent(
                         ClickEvent.Action.OPEN_URL,
                         "$analysisLink&flip=${player == blackPlayer}"
