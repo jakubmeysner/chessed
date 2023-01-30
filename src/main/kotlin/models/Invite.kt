@@ -1,5 +1,6 @@
 package com.jakubmeysner.chessed.models
 
+import com.github.bhlangonijr.chesslib.Side
 import com.jakubmeysner.chessed.Chessed
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
@@ -87,9 +88,11 @@ class Invite(
         Game(
             plugin,
             arena,
-            whitePlayer,
-            if (inviter == whitePlayer) invitee else inviter,
-            time
+            time,
+            mapOf(
+                Side.WHITE to whitePlayer,
+                Side.BLACK to if (inviter == whitePlayer) invitee else inviter,
+            )
         )
     }
 

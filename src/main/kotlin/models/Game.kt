@@ -20,9 +20,8 @@ import java.time.Instant
 class Game(
     private val plugin: Chessed,
     val arena: Arena,
-    val whitePlayer: Player,
-    val blackPlayer: Player,
-    val time: Time
+    val time: Time,
+    val players: Map<Side, Player>
 ) {
     val board = Board()
 
@@ -34,10 +33,45 @@ class Game(
             )
         }"
 
-    var whiteTimeEnd: Instant? = Instant.now().plus(time.startDuration)
-    var whiteTimeLeft: Duration? = null
-    var blackTimeEnd: Instant? = null
-    var blackTimeLeft: Duration? = time.startDuration
+    val whitePlayer
+        get() = players.getValue(Side.WHITE)
+
+    val blackPlayer
+        get() = players.getValue(Side.BLACK)
+
+    val timeEnd = mutableMapOf(
+        Side.WHITE to Instant.now().plus(time.startDuration),
+        Side.BLACK to null
+    )
+
+    val timeLeft = mutableMapOf(
+        Side.WHITE to null,
+        Side.BLACK to time.startDuration
+    )
+
+    var whiteTimeEnd: Instant?
+        get() = timeEnd.getValue(Side.WHITE)
+        set(value) {
+            timeEnd[Side.WHITE] = value
+        }
+
+    var whiteTimeLeft: Duration?
+        get() = timeLeft.getValue(Side.WHITE)
+        set(value) {
+            timeLeft[Side.WHITE] = value
+        }
+
+    var blackTimeEnd: Instant?
+        get() = timeEnd.getValue(Side.BLACK)
+        set(value) {
+            timeEnd[Side.BLACK] = value
+        }
+
+    var blackTimeLeft: Duration?
+        get() = timeLeft.getValue(Side.BLACK)
+        set(value) {
+            timeLeft[Side.BLACK] = value
+        }
 
     val whiteBossBar = Bukkit
         .createBossBar("", BarColor.WHITE, BarStyle.SEGMENTED_10)
